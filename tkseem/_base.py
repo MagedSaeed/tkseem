@@ -74,7 +74,11 @@ class BaseTokenizer:
         Returns:
             dict : dict containing frequency
         """
-        text = open(file_path, "r").read()
+        text = ''
+        with open(file_path, "r") as f:
+            text = f.read()
+        if not text:
+            raise ValueError(f'could not read text from text file:{file_path}')
         tokens_frequency = defaultdict(int)
         for word in text.split(" "):
             tokens_frequency[word] += 1
