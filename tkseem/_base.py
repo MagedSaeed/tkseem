@@ -287,7 +287,7 @@ class BaseTokenizer:
         This implementation is very slow!!
         '''
         #return list(self.vocab.keys()).index(piece)
-        for index,token in enumerate(self.vocav.keys()):
+        for index,token in enumerate(self.vocab.keys()):
             if token==piece:
                 return index
         raise ValueError(f'{piece} is not in voacb')
