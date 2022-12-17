@@ -276,7 +276,7 @@ class BaseTokenizer:
         )
         return limited_tokens_frequency
 
-    @lru_cache
+    @lru_cache(maxsize=None)
     def token_to_id(self, piece):
         """ Get tokens list
 
