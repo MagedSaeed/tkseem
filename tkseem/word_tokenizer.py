@@ -29,12 +29,16 @@ class WordTokenizer(BaseTokenizer):
             list: generated tokens
         """
         assert self.vocab
+        
+        words = text.split()
+        unknown_words = set(words) - set(self.vocab.keys())
+        
         output_tokens = []
-        for word in text.split():
-            if word in self.vocab.keys():
-                output_tokens.append(word)
-            else:
+        for word in words:
+            if word in unkown_words:
                 output_tokens.append(self.unk_token)
+            else:
+                output_tokens.append(word)
         return output_tokens
 
     def detokenize(self, tokens):
