@@ -35,7 +35,7 @@ class WordTokenizer(BaseTokenizer):
         
         output_tokens = []
         for word in words:
-            if word in unkown_words:
+            if word in unknown_words:
                 output_tokens.append(self.unk_token)
             else:
                 output_tokens.append(word)
