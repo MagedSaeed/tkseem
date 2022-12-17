@@ -6,6 +6,7 @@ import itertools
 import numpy as np
 from tqdm import tqdm
 from pathlib import Path
+from functools import lru_cache
 from .util import split_on_binary
 from collections import Counter, defaultdict
 
@@ -275,13 +276,22 @@ class BaseTokenizer:
         )
         return limited_tokens_frequency
 
+    @lru_cache
     def token_to_id(self, piece):
         """ Get tokens list
 
         Returns:
             list: tokens 
         """
-        return list(self.vocab.keys()).index(piece)
+        '''
+        This implementation is very slow!!
+        '''
+        #return list(self.vocab.keys()).index(piece)
+        for index,token in enumerate(self.vocav.keys()):
+            if token==piece:
+                return index
+        raise ValueError(f'{piece} is not in voacb')
+        
 
     def id_to_token(self, id):
         """convert id to token
