@@ -287,10 +287,17 @@ class BaseTokenizer:
         This implementation is very slow!!
         '''
         #return list(self.vocab.keys()).index(piece)
+        if not hasattr(self,'_vocab_indexes_dict') or not self._vocab_indexes_dict:
+            self._vocab_indexes_dict = {word:index for index,word in enumerate(self.vocab.keys())}
+        
+        return self._vocab_indexes_dict[piece]
+            
+        '''
         for index,token in enumerate(self.vocab.keys()):
             if token==piece:
                 return index
         raise ValueError(f'{piece} is not in voacb')
+        '''
         
 
     def id_to_token(self, id):
