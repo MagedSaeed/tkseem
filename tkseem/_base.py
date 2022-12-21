@@ -378,8 +378,9 @@ class BaseTokenizer:
         if length <= len(ids):
             return ids
         else:
-            while len(ids) <= length:
-                ids.append(pad_id)
+            ids.extend([pad_id]*(length - len(ids)))
+            #while len(ids) <= length:
+            #    ids.append(pad_id)
         return ids
 
     def encode_sentences(self, sentences, boundries=None, out_length=None):
