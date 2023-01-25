@@ -8,6 +8,10 @@ from ._base import BaseTokenizer
 class FarasaMorphologicalTokenizer(BaseTokenizer):
     """tokenize text based on farasa segmentation"""
 
+    def __init__(self, interactive_segmentation=False, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.interactive = interactive_segmentation
+
     def train(self, file_path):
         """Train data using farasa
 
@@ -17,7 +21,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
 
         print("Training FarasaMorphologicalTokenizer...")
 
-        segmenter = FarasaSegmenter(interactive=False)
+        segmenter = FarasaSegmenter(interactive=self.interactive)
 
         with open(file_path, "r") as f:
             text = f.read()
