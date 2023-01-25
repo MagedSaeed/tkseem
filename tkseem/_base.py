@@ -75,14 +75,15 @@ class BaseTokenizer:
         Returns:
             dict : dict containing frequency
         """
-        text = ''
+        text = ""
         with open(file_path, "r") as f:
             text = f.read()
         if not text:
-            raise ValueError(f'could not read text from text file:{file_path}')
+            raise ValueError(f"could not read text from text file:{file_path}")
         tokens_frequency = defaultdict(int)
-        for word in text.split(" "):
-            tokens_frequency[word] += 1
+        for line in text.splitlines():
+            for word in line.split(" "):
+                tokens_frequency[word] += 1
         return dict(tokens_frequency)
 
     def _split_word(self, word, number_of_subwords):
