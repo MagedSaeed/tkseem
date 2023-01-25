@@ -30,6 +30,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
 
         tokens_frequency = defaultdict(int)
         for line in segmented.splitlines():
+            line = line.replace("+", " ##")
             for word in line.split(" "):
                 tokens_frequency[word] += 1
 
