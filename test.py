@@ -62,6 +62,7 @@ for tokenizer in (
     tk.SentencePieceTokenizer(),
     tk.WordTokenizer(),
     tk.MorphologicalTokenizer(),
+    tk.FarasaMorphologicalTokenizer(),
     tk.CharacterTokenizer(),
     tk.DisjointLetterTokenizer(),
     tk.RandomTokenizer(),
