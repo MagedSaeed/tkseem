@@ -28,3 +28,24 @@ class DisjointLetterTokenizer(BaseTokenizer):
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
         self.vocab_size = len(self.vocab)
+
+    def basic_tokenize(self, text):
+        """Tokenize with basic tokenization
+        That is, tokenize the text then select pieces that are in the vocab. Do not optimize on the best splits like in self.tokenize() method
+        Args:
+            text (str): input string
+        Returns:
+            list: generated tokens
+        """
+        rx = re.compile(r"([اأإآءؤﻵﻹﻷدذرزو])")
+        text = rx.sub(r"\1## ", text)
+        text = text.replace("## ", " ##")
+
+        output_tokens = []
+
+        for token in text.split():
+            if token in self.vocab:
+                output_tokens.append(token)
+            else:
+                output_tokens.append(self.unk_token)
+        return output_tokens

@@ -8,7 +8,7 @@ from ._base import BaseTokenizer
 class FarasaMorphologicalTokenizer(BaseTokenizer):
     """tokenize text based on farasa segmentation"""
 
-    def __init__(self, interactive_segmentation=False, *args, **kwargs):
+    def __init__(self, interactive_segmentation=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.segmenter = FarasaSegmenter(interactive=interactive_segmentation)
 
@@ -24,7 +24,9 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
         with open(file_path, "r") as f:
             text = f.read()
 
-        segmented = self.segmenter.segment(text)
+        segmented = list(
+            map(self.segmenter.segment, (line for line in text.splitlines()),)
+        )
 
         tokens_frequency = defaultdict(int)
         for line in segmented.splitlines():
@@ -34,15 +36,16 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
         self.vocab_size = len(self.vocab)
-    
-    def tokenize(self, text):
-        """Tokenize using the frequency dictionary 
+
+    def basic_tokenize(self, text):
+        """Tokenize with basic tokenization
+        That is, tokenize the text then select pieces that are in the vocab. Do not optimize on the best splits like in self.tokenize() method
         Args:
             text (str): input string
         Returns:
             list: generated tokens
         """
-        text = self.segmenter.segment(text).replace('+',' ##')
+        text = self.segmenter.segment(text).replace("+", " ##")
         output_tokens = []
 
         for token in text.split():
