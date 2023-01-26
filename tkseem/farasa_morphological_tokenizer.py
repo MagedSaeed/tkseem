@@ -42,7 +42,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
         Returns:
             list: generated tokens
         """
-        text = self.segmenter.segment(text)
+        text = self.segmenter.segment(text).replace('+',' ##')
         output_tokens = []
 
         for token in text.split():
