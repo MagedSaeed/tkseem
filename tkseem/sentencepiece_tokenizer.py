@@ -6,14 +6,13 @@ from ._base import BaseTokenizer
 
 
 class SentencePieceTokenizer(BaseTokenizer):
-    """ Sentencepiece based tokenization. 
-    """
+    """Sentencepiece based tokenization."""
 
     def train(self, file_path, model_type="bpe"):
-        """ Train using sentence piece
+        """Train using sentence piece
 
         Args:
-            file_path (str): file to train 
+            file_path (str): file to train
             model_type (str, optional): train using sp. Defaults to "bpe".
         """
         print("Training SentencePiece ...")
@@ -37,7 +36,7 @@ class SentencePieceTokenizer(BaseTokenizer):
         self.vocab_size = self.sp.vocab_size()
 
     def tokenize(self, text):
-        """Tokenize using the frequency dictionary 
+        """Tokenize using the frequency dictionary
 
         Args:
             text (str): input string
@@ -46,6 +45,19 @@ class SentencePieceTokenizer(BaseTokenizer):
             list: generated tokens
         """
         return self.sp.encode(text, out_type=str)
+
+    def tokenize_from_splits(self, text):
+        """Tokenize with basic tokenization
+        That is, tokenize the text then select pieces that are in the vocab. Do not optimize on the best splits like in self.tokenize() method
+        In the case of SentencePiece tokenization, it is not available
+        Args:
+            text (str): input string
+        Returns:
+            list: generated tokens
+        """
+        raise ValueError(
+            "This type of tokenization is not implemented for SentencePiece tokenizer"
+        )
 
     def load_model(self, file_path):
         """Load a saved sp model
@@ -72,7 +84,7 @@ class SentencePieceTokenizer(BaseTokenizer):
         return self.sp.piece_to_id(token)
 
     def encode(self, text):
-        """ Convert string to a list of ids
+        """Convert string to a list of ids
 
         Args:
             text (str): input string
@@ -83,7 +95,7 @@ class SentencePieceTokenizer(BaseTokenizer):
         return self.sp.encode(text, out_type=int)
 
     def decode(self, encoded):
-        """ Decode ids
+        """Decode ids
 
         Args:
             encoded (list): list of ids to decode
@@ -94,7 +106,7 @@ class SentencePieceTokenizer(BaseTokenizer):
         return self.sp.id_to_piece(encoded)
 
     def detokenize(self, tokens):
-        """ Convert tokens to a string
+        """Convert tokens to a string
 
         Args:
             tokens (list): list of tokens

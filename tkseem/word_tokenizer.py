@@ -3,7 +3,7 @@ from ._base import BaseTokenizer
 
 class WordTokenizer(BaseTokenizer):
     """
-    White space based tokenization 
+    White space based tokenization
     """
 
     tokens_frequency = None
@@ -20,7 +20,7 @@ class WordTokenizer(BaseTokenizer):
         self.vocab_size = len(self.vocab)
 
     def tokenize(self, text):
-        """Tokenize using the frequency dictionary 
+        """Tokenize using the frequency dictionary
 
         Args:
             text (str): input string
@@ -29,7 +29,7 @@ class WordTokenizer(BaseTokenizer):
             list: generated tokens
         """
         assert self.vocab
-       
+
         output_tokens = []
         for word in text.split():
             if word in self.vocab.keys():
@@ -38,8 +38,19 @@ class WordTokenizer(BaseTokenizer):
                 output_tokens.append(self.unk_token)
         return output_tokens
 
+    def tokenize_from_splits(self, text):
+        """Tokenize with basic tokenization
+        That is, tokenize the text then select pieces that are in the vocab. Do not optimize on the best splits like in self.tokenize() method
+        In the case of Words tokenization, they are the same
+        Args:
+            text (str): input string
+        Returns:
+            list: generated tokens
+        """
+        return self.tokenize(text)
+
     def detokenize(self, tokens):
-        """ Convert tokens to a string
+        """Convert tokens to a string
 
         Args:
             tokens (list): list of tokens
