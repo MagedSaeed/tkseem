@@ -24,7 +24,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
         with open(file_path, "r") as f:
             text = f.read()
 
-        segmented = list(
+        segmented_lines = list(
             map(
                 self.segmenter.segment,
                 (line for line in text.splitlines()),
@@ -32,7 +32,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
         )
 
         tokens_frequency = defaultdict(int)
-        for line in segmented.splitlines():
+        for line in segmented_lines:
             line = line.replace("+", " ##")
             for word in line.split(" "):
                 tokens_frequency[word] += 1
