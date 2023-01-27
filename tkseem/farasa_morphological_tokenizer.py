@@ -64,7 +64,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
             segmenter = FarasaSegmenter(interactive=interactive_segmentation)
         assert isinstance(
             segmenter,
-            FarasaMorphologicalTokenizer,
-        ), "segmenter should be an instance of FarasaMorphologicalTokenizer"
+            FarasaSegmenter,
+        ), "segmenter should be an instance of FarasaSegmenter"
         text = segmenter.segment(text).replace("+", " ##")
         return text.split()
