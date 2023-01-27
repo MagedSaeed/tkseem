@@ -27,7 +27,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
 
         segmented_lines = list(
             map(
-                self.split_text,
+                lambda line: self.split_text(line, segmenter=self.segmenter),
                 (line for line in text.splitlines()),
             )
         )
@@ -50,7 +50,7 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
         """
         output_tokens = []
 
-        for token in self.split_text(text):
+        for token in self.split_text(text, segmenter=self.segmenter):
             if token in self.vocab:
                 output_tokens.append(token)
             else:
@@ -59,7 +59,12 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
 
     @classmethod
     @lru_cache(maxsize=10_000)
-    def split_text(cls, text, interactive_segmentation=True):
-        segmenter = FarasaSegmenter(interactive=interactive_segmentation)
+    def split_text(cls, text, interactive_segmentation=True, segmenter=None):
+        if segmenter is None:
+            segmenter = FarasaSegmenter(interactive=interactive_segmentation)
+        assert isinstance(
+            segmenter,
+            FarasaMorphologicalTokenizer,
+        ), "segmenter should be an instance of FarasaMorphologicalTokenizer"
         text = segmenter.segment(text).replace("+", " ##")
         return text.split()
