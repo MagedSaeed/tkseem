@@ -62,6 +62,7 @@ class WordTokenizer(BaseTokenizer):
         detokenized = " ".join(tokens)
         return detokenized
 
+    @classmethod
     @lru_cache(maxsize=10_000)
-    def split_text(self, text):
+    def split_text(cls, text):
         return text.split()

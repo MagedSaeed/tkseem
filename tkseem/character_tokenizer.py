@@ -56,8 +56,9 @@ class CharacterTokenizer(BaseTokenizer):
         """
         return self.tokenize(text)
 
+    @classmethod
     @lru_cache(maxsize=10_000)
-    def split_text(self, text):
+    def split_text(cls, text):
         rx = re.compile(r"\B(.)")
         text = rx.sub(r" ##\1", text)
         return text.split()

@@ -47,8 +47,9 @@ class DisjointLetterTokenizer(BaseTokenizer):
                 output_tokens.append(self.unk_token)
         return output_tokens
 
+    @classmethod
     @lru_cache(maxsize=10_000)
-    def split_text(self, text):
+    def split_text(cls, text):
         rx = re.compile(r"([اأإآءؤﻵﻹﻷدذرزو])")
         text = rx.sub(r"\1## ", text)
         text = text.replace("## ", " ##")

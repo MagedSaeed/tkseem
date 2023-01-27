@@ -57,7 +57,9 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
                 output_tokens.append(self.unk_token)
         return output_tokens
 
+    @classmethod
     @lru_cache(maxsize=10_000)
-    def split_text(self, text):
-        text = self.segmenter.segment(text).replace("+", " ##")
+    def split_text(cls, text, interactive_segmentation=True):
+        segmenter = FarasaSegmenter(interactive=interactive_segmentation)
+        text = segmenter.segment(text).replace("+", " ##")
         return text.split()
