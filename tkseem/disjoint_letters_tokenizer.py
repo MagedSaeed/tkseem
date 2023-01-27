@@ -23,6 +23,8 @@ class DisjointLetterTokenizer(BaseTokenizer):
 
         tokens_frequency = defaultdict(int)
         for word in text.split(" "):
+            if word == '##':
+                continue
             tokens_frequency[word] += 1
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
@@ -42,7 +44,9 @@ class DisjointLetterTokenizer(BaseTokenizer):
 
         output_tokens = []
 
-        for token in text.split():
+        for token in text.split(" "):
+            if token == '##':
+                continue
             if token in self.vocab:
                 output_tokens.append(token)
             else:
