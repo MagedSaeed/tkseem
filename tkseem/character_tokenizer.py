@@ -56,12 +56,4 @@ class CharacterTokenizer(BaseTokenizer):
         Returns:
             list: generated tokens
         """
-        text = self.segmenter.segment(text).replace("+", " ##")
-        output_tokens = []
-
-        for token in text.split():
-            if token in self.vocab:
-                output_tokens.append(token)
-            else:
-                output_tokens.append(self.unk_token)
-        return output_tokens
+        return self.tokenize(text)
