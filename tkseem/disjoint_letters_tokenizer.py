@@ -24,8 +24,6 @@ class DisjointLetterTokenizer(BaseTokenizer):
 
         tokens_frequency = defaultdict(int)
         for word in text.split(" "):
-            if word == "##":
-                continue
             tokens_frequency[word] += 1
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
@@ -43,8 +41,6 @@ class DisjointLetterTokenizer(BaseTokenizer):
         output_tokens = []
 
         for token in self.split_text(text):
-            if token == "##":
-                continue
             if token in self.vocab:
                 output_tokens.append(token)
             else:
@@ -56,4 +52,6 @@ class DisjointLetterTokenizer(BaseTokenizer):
         rx = re.compile(r"([اأإآءؤﻵﻹﻷدذرزو])")
         text = rx.sub(r"\1## ", text)
         text = text.replace("## ", " ##")
-        return text.split()
+        tokens = text.split()
+        tokens = list(filter(lambda token: token != "##", tokens))
+        return tokens
