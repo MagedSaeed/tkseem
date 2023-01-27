@@ -1,3 +1,4 @@
+from functools import lru_cache
 import pickle
 import re
 from collections import defaultdict
@@ -15,13 +16,11 @@ class CharacterTokenizer(BaseTokenizer):
             file_path (str): file to train
         """
         print("Training CharacterTokenizer ...")
-        rx = re.compile(r"\B(.)")
 
         text = open(file_path, "r").read()
-        text = rx.sub(r" ##\1", text)
 
         tokens_frequency = defaultdict(int)
-        for word in text.split(" "):
+        for word in self.split_text(text):
             tokens_frequency[word] += 1
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
@@ -36,11 +35,10 @@ class CharacterTokenizer(BaseTokenizer):
         Returns:
             list: generated tokens
         """
-        rx = re.compile(r"\B(.)")
-        text = rx.sub(r" ##\1", text)
+
         output_tokens = []
 
-        for token in text.split():
+        for token in self.split_text(text):
             if token in self.vocab:
                 output_tokens.append(token)
             else:
@@ -57,3 +55,9 @@ class CharacterTokenizer(BaseTokenizer):
             list: generated tokens
         """
         return self.tokenize(text)
+
+    @lru_cache(maxsize=10_000)
+    def split_text(self, text):
+        rx = re.compile(r"\B(.)")
+        text = rx.sub(r" ##\1", text)
+        return text.split()

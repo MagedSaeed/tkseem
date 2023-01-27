@@ -1,3 +1,4 @@
+from functools import lru_cache
 from ._base import BaseTokenizer
 
 
@@ -31,7 +32,7 @@ class WordTokenizer(BaseTokenizer):
         assert self.vocab
 
         output_tokens = []
-        for word in text.split():
+        for word in self.split_text(text):
             if word in self.vocab.keys():
                 output_tokens.append(word)
             else:
@@ -60,3 +61,7 @@ class WordTokenizer(BaseTokenizer):
         """
         detokenized = " ".join(tokens)
         return detokenized
+
+    @lru_cache(maxsize=10_000)
+    def split_text(self, text):
+        return text.split()

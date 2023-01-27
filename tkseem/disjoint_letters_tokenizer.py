@@ -1,3 +1,4 @@
+from functools import lru_cache
 import pickle
 import re
 from collections import defaultdict
@@ -23,7 +24,7 @@ class DisjointLetterTokenizer(BaseTokenizer):
 
         tokens_frequency = defaultdict(int)
         for word in text.split(" "):
-            if word == '##':
+            if word == "##":
                 continue
             tokens_frequency[word] += 1
 
@@ -38,17 +39,21 @@ class DisjointLetterTokenizer(BaseTokenizer):
         Returns:
             list: generated tokens
         """
-        rx = re.compile(r"([اأإآءؤﻵﻹﻷدذرزو])")
-        text = rx.sub(r"\1## ", text)
-        text = text.replace("## ", " ##")
 
         output_tokens = []
 
-        for token in text.split(" "):
-            if token == '##':
+        for token in self.split_text(text):
+            if token == "##":
                 continue
             if token in self.vocab:
                 output_tokens.append(token)
             else:
                 output_tokens.append(self.unk_token)
         return output_tokens
+
+    @lru_cache(maxsize=10_000)
+    def split_text(self, text):
+        rx = re.compile(r"([اأإآءؤﻵﻹﻷدذرزو])")
+        text = rx.sub(r"\1## ", text)
+        text = text.replace("## ", " ##")
+        return text.split()

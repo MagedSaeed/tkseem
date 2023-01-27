@@ -1,4 +1,5 @@
 from collections import defaultdict
+from functools import lru_cache
 
 from farasa.segmenter import FarasaSegmenter
 
@@ -26,16 +27,15 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
 
         segmented_lines = list(
             map(
-                self.segmenter.segment,
+                self.split_text,
                 (line for line in text.splitlines()),
             )
         )
 
         tokens_frequency = defaultdict(int)
-        for line in segmented_lines:
-            line = line.replace("+", " ##")
-            for word in line.split(" "):
-                tokens_frequency[word] += 1
+        for split_line in segmented_lines:
+            for token in split_line:
+                tokens_frequency[token] += 1
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
         self.vocab_size = len(self.vocab)
@@ -48,12 +48,16 @@ class FarasaMorphologicalTokenizer(BaseTokenizer):
         Returns:
             list: generated tokens
         """
-        text = self.segmenter.segment(text).replace("+", " ##")
         output_tokens = []
 
-        for token in text.split():
+        for token in self.split_text(text):
             if token in self.vocab:
                 output_tokens.append(token)
             else:
                 output_tokens.append(self.unk_token)
         return output_tokens
+
+    @lru_cache(maxsize=10_000)
+    def split_text(self, text):
+        text = self.segmenter.segment(text).replace("+", " ##")
+        return text.split()
