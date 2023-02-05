@@ -16,14 +16,12 @@ class DisjointLetterTokenizer(BaseTokenizer):
             file_path (str): file to train
         """
         print("Training DisjointLetterTokenizer ...")
-        rx = re.compile(r"([اأإآءؤﻵﻹﻷدذرزو])")
 
         text = open(file_path, "r").read()
-        text = rx.sub(r"\1## ", text)
-        text = text.replace("## ", " ##")
 
         tokens_frequency = defaultdict(int)
-        for word in text.split(" "):
+        
+        for word in self.split_text(text):
             tokens_frequency[word] += 1
 
         self.vocab = self._truncate_dict(dict(tokens_frequency))
