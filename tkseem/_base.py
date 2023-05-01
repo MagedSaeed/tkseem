@@ -66,18 +66,20 @@ class BaseTokenizer:
                     pbar.update(1)
         return freq
 
-    def _get_tokens_frequency(self, file_path):
+    def _get_tokens_frequency(self, text=None, file_path=None):
         """
         Get tokens frequency using a dictionary
 
         Args:
+            text (list): list of strings to calcuate the frequencies
             file_path (str): file path to read
         Returns:
             dict : dict containing frequency
         """
-        text = ""
-        with open(file_path, "r") as f:
-            text = f.read()
+        if not text:
+            text = ""
+            with open(file_path, "r") as f:
+                text = f.read()
         if not text:
             raise ValueError(f"could not read text from text file:{file_path}")
         tokens_frequency = defaultdict(int)
