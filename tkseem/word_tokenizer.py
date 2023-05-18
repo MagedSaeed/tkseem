@@ -9,7 +9,7 @@ class WordTokenizer(BaseTokenizer):
 
     tokens_frequency = None
 
-    def train(self, file_path):
+    def train(self, file_path=None,text=None):
         """Train using words' frequency
 
         Args:
@@ -17,7 +17,7 @@ class WordTokenizer(BaseTokenizer):
         """
 
         print("Training WordTokenizer ...")
-        self.vocab = self._truncate_dict(self._get_tokens_frequency(file_path))
+        self.vocab = self._truncate_dict(self._get_tokens_frequency(file_path=file_path,text=text))
         self.vocab_size = len(self.vocab)
 
     def tokenize(self, text):
