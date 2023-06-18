@@ -9,15 +9,17 @@ from ._base import BaseTokenizer
 class CharacterTokenizer(BaseTokenizer):
     """Character based tokenization"""
 
-    def train(self, file_path):
+    def train(self, file_path=None,text=None):
         """Train data using characters
 
         Args:
             file_path (str): file to train
         """
         print("Training CharacterTokenizer ...")
-
-        text = open(file_path, "r").read()
+        
+        assert file_path is not None or text is not None,'either file_path or text should be provided'
+        if text is None:
+            text = open(file_path, "r").read()
 
         tokens_frequency = defaultdict(int)
         for word in self.split_text(text):
