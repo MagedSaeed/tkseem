@@ -292,8 +292,9 @@ class BaseTokenizer:
         #return list(self.vocab.keys()).index(piece)
         if not hasattr(self,'_vocab_indexes_dict') or not self._vocab_indexes_dict:
             self._vocab_indexes_dict = {word:index for index,word in enumerate(self.vocab.keys())}
-        
-        return self._vocab_indexes_dict[piece]
+        if piece in self._vocab_indexes_dict:
+            return self._vocab_indexes_dict[piece]
+        return self.unk_token
             
         '''
         for index,token in enumerate(self.vocab.keys()):
@@ -312,6 +313,8 @@ class BaseTokenizer:
         Returns:
             str: token
         """
+        if id not in self.vocab.keys():
+            raise ValueError(f'id {id} is not in vocab')
         return list(self.vocab.keys())[id]
 
     def tokenize(self, text, use_cache=False, max_cache_size=1000):
