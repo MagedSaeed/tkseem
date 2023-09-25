@@ -313,7 +313,7 @@ class BaseTokenizer:
         Returns:
             str: token
         """
-        if id not in self.vocab.keys():
+        if id > len(self.vocab.keys()):
             raise ValueError(f'id {id} is not in vocab')
         return list(self.vocab.keys())[id]
 
